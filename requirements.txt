@@ -9,3 +9,5 @@ Jinja2==2.10
 SQLAlchemy==1.2.17
 marshmallow-sqlalchemy==0.15.0
 pytest==4.1.1
+bp==0.0.4
+python-dotenv==0.10.1
