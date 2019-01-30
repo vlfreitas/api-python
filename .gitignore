@@ -103,7 +103,3 @@ env
 
 # mypy
 .mypy_cache/
-
-# Pycharm
-.idea/
-.idea
