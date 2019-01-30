@@ -1,17 +1,14 @@
-from flask import jsonify
-from flask import request
+from flask import jsonify, request
 from app import db
 from app.api import bp
 from app.api.errors import bad_request
 from app.models import User
+from config import Config
 import requests
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-baseurl = "http://omdbapi.com/?"
-apikey = "apikey=6773e9f"
 
 @bp.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
@@ -46,8 +43,7 @@ def get_user_filmes(id):
         if request.args.get('s') is not None:
             if user.requestQuantity > 0:
                 payload = request.args
-                url = baseurl + apikey
-                response = requests.get(url, params=payload)
+                response = requests.get(Config.API_URL, params=payload)
                 if response.status_code == 200:
                     user.requestQuantity -= 1
                     db.session.commit()
