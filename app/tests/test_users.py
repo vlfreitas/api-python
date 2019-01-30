@@ -12,6 +12,6 @@ class UsersTests(unittest.TestCase):
     def test_get_user(self):
         # sends HTTP GET request to the application
         # on the specified path
-        result = self.app.get('/api/user/1')
+        result = self.app.get('/api/users/1')
         # assert the status code of the response
         self.assertEqual(result.status_code, 200)
