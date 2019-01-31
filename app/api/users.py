@@ -27,8 +27,7 @@ def create_user():
         return bad_request('Nome de usuário já esta em uso')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('Email já esta em uso')
-    user = User()
-    user.from_dict(data)
+    user = User(data['username'], data['email'])
     user.requestQuantity = 50
     db.session.add(user)
     db.session.commit()
