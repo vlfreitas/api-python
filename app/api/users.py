@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from app import db
-from app.api import bp
+from app.api import api
 from app.api.errors import bad_request
 from app.models import User
 from config import Config
@@ -10,7 +10,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-@bp.route('/users/<int:id>', methods=['GET'])
+@api.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get(id)
     if user is not None:
@@ -18,7 +18,7 @@ def get_user(id):
     return bad_request("Usuário não existe.")
 
 
-@bp.route('/users', methods=['POST'])
+@api.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
     if 'username' not in data or 'email' not in data:
@@ -33,10 +33,10 @@ def create_user():
     db.session.add(user)
     db.session.commit()
     logger.info("## Usuário %s cadastrado ##", user.username)
-    return jsonify(user.to_dict(include_email=True)), 200
+    return jsonify(user.to_dict(include_email=True)), 201
 
 
-@bp.route('/users/<int:id>/filme', methods=['GET'])
+@api.route('/users/<int:id>/filme', methods=['GET'])
 def get_user_filmes(id):
     user = User.query.get(id)
     if user is not None:
@@ -58,7 +58,7 @@ def get_user_filmes(id):
     return bad_request("Usuário não existe.")
 
 
-@bp.route('/users/<int:id>', methods=['PUT'])
+@api.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
     data = request.get_json()
     user = User.query.get(id)
@@ -71,7 +71,7 @@ def update_user(id):
     return jsonify(user.to_dict(include_email=True)), 200
 
 
-@bp.route('/users/<int:id>/delete', methods=['DELETE'])
+@api.route('/users/<int:id>/delete', methods=['DELETE'])
 def delete_user(id):
     user = User.query.get(id)
     if user is not None:
