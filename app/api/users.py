@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from app import db
 from app.api import api
-from app.api.errors import bad_request
 from app.models import User
 from config import Config
 import requests
@@ -9,6 +8,7 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 @api.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
