@@ -8,6 +8,11 @@ class User(db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     requestQuantity = db.Column(db.Integer)
 
+    def __init__(self, username, email, requestquantity):
+        self.username = username
+        self.email = email
+        self.requestQuantity = requestquantity
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -16,13 +21,11 @@ class User(db.Model):
             if field in data:
                 setattr(self, field, data[field])
 
-    def to_dict(self, include_email=False):
+    def to_dict(self):
         data = {
             'id': self.id,
             'username': self.username,
-            'requestQuantity': self.requestQuantity
-
+            'requestQuantity': self.requestQuantity,
+            "email": self.email
         }
-        if include_email:
-            data['email'] = self.email
         return data

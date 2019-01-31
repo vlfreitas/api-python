@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def get_user(id):
     user = User.query.get(id)
     if user is not None:
-        return jsonify(user.to_dict(include_email=True)), 200
+        return jsonify(user.to_dict()), 200
     return bad_request("Usuário não existe.")
 
 
@@ -33,7 +33,7 @@ def create_user():
     db.session.add(user)
     db.session.commit()
     logger.info("## Usuário %s cadastrado ##", user.username)
-    return jsonify(user.to_dict(include_email=True)), 201
+    return jsonify(user.to_dict()), 201
 
 
 @api.route('/users/<int:id>/filme', methods=['GET'])
@@ -54,7 +54,7 @@ def get_user_filmes(id):
                 return bad_request("Usuário zerou sua quantidade de requisições")
         else:
             return bad_request("Necessário informar o titulo do filme")
-        return jsonify(user.to_dict(include_email=True)), 200
+        return jsonify(user.to_dict()), 200
     return bad_request("Usuário não existe.")
 
 
@@ -68,7 +68,7 @@ def update_user(id):
     user.email = data['email']
     db.session.commit()
     logger.info("## Email do usuário %s atualizado ##", user.username)
-    return jsonify(user.to_dict(include_email=True)), 200
+    return jsonify(user.to_dict()), 200
 
 
 @api.route('/users/<int:id>/delete', methods=['DELETE'])
