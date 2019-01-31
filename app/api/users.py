@@ -14,25 +14,31 @@ logger = logging.getLogger(__name__)
 def get_user(id):
     user = User.query.get(id)
     if user is not None:
-        return jsonify(user.to_dict()), 200
-    return bad_request("Usuário não existe.")
+        return jsonify(id=user.id,
+                       username=user.username,
+                       email=user.email,
+                       requestQuantity=user.requestQuantity), 200
+    return jsonify(message="Usuário não existe."), 400
 
 
 @api.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
     if 'username' not in data or 'email' not in data:
-        return bad_request('É necessário nome de usuário e email')
+        return jsonify(message='É necessário nome de usuário e email'), 400
     if User.query.filter_by(username=data['username']).first():
-        return bad_request('Nome de usuário já esta em uso')
+        return jsonify(message='Nome de usuário já esta em uso'), 200
     if User.query.filter_by(email=data['email']).first():
-        return bad_request('Email já esta em uso')
+        return jsonify(message='Email já esta em uso'), 200
     user = User(data['username'], data['email'])
     user.requestQuantity = 50
     db.session.add(user)
     db.session.commit()
     logger.info("## Usuário %s cadastrado ##", user.username)
-    return jsonify(user.to_dict()), 201
+    return jsonify(id=user.id,
+                   username=user.username,
+                   email=user.email,
+                   requestQuantity=user.requestQuantity), 201
 
 
 @api.route('/users/<int:id>/filme', methods=['GET'])
@@ -43,18 +49,17 @@ def get_user_filmes(id):
             if user.requestQuantity > 0:
                 payload = request.args
                 response = requests.get(Config.API_URL, params=payload)
-                if response.status_code == 200:
+                if response.json()['Error'] is None:
                     user.requestQuantity -= 1
                     db.session.commit()
-                    return jsonify(response.json())
+                    return jsonify(filmes=response.json()['Search']), 200
                 else:
-                    return jsonify({"message": "Ocorreu um erro"}), response.status_code
+                    return jsonify(message=response.json()['Error']), 200
             else:
-                return bad_request("Usuário zerou sua quantidade de requisições")
+                return jsonify(message="Usuário zerou sua quantidade de requisições"), 200
         else:
-            return bad_request("Necessário informar o titulo do filme")
-        return jsonify(user.to_dict()), 200
-    return bad_request("Usuário não existe.")
+            return jsonify(message="Necessário informar o titulo do filme"), 400
+    return jsonify(message="Usuário não existe."), 400
 
 
 @api.route('/users/<int:id>', methods=['PUT'])
@@ -63,11 +68,14 @@ def update_user(id):
     user = User.query.get(id)
     if User.query.filter_by(email=data['email']).first():
         logger.info("## Email escolhido pelo usuario %s já esta em uso ##", user.username)
-        return bad_request("Email já esta em uso")
+        return jsonify(message="Email já esta em uso"), 200
     user.email = data['email']
     db.session.commit()
     logger.info("## Email do usuário %s atualizado ##", user.username)
-    return jsonify(user.to_dict()), 200
+    return jsonify(id=user.id,
+                   username=user.username,
+                   email=user.email,
+                   requestQuantity=user.requestQuantity), 200
 
 
 @api.route('/users/<int:id>/delete', methods=['DELETE'])
@@ -79,6 +87,6 @@ def delete_user(id):
         logger.info("## Usuário %s deletado ##", user.username)
         return jsonify({'message':'Usuário deletado'}), 200
     logger.info("## Não existe usuários cadastrados para o id = %d ##", id)
-    return bad_request("Usuário não existe")
+    return jsonify(message="Usuário não existe"), 400
 
 

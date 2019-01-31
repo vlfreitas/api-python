@@ -12,12 +12,3 @@ class User(db.Model):
         self.username = username
         self.email = email
         self.requestQuantity = requestquantity
-
-    def to_dict(self):
-        data = {
-            'id': self.id,
-            'username': self.username,
-            'requestQuantity': self.requestQuantity,
-            "email": self.email
-        }
-        return data
