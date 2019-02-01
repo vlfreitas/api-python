@@ -19,3 +19,7 @@ Necessário estar instalado python3.7 e pip3
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 317-054-060
+
+
+## Documentação dos endpoints ##
+Após subir a aplicação acesse: http://localhost:5000/apidocs/
