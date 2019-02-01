@@ -8,10 +8,9 @@ Necessário estar instalado python3.7 e pip3
 3 - Digite **source venv/bin/activate** <br>
 4 - Rode o comando **pip3 install -r requirements.txt** <br>
 5 - Digite o comando **export FLASK_ENV=development** <br>
-6 - Agora para iniciar o banco digite **flask db init** <br>
-7 - Digite **flask db migrate** <br>
-8 - Por fim para o banco digite **flask db upgrade** <br>
-7 - Digite **flask run** e aguarde a saída: <br>
+6 - Digite **flask db migrate** <br>
+7 - Por fim para o banco digite **flask db upgrade** <br>
+8 - Digite **flask run** e aguarde a saída: <br>
  
  * Environment: development
  * Debug mode: on
