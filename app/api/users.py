@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@api.route('/users/<int:id>', methods=['GET'])
+@api.route('/user/<int:id>', methods=['GET'])
 def get_user(id):
     """
     Method for return a user
